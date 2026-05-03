@@ -1,0 +1,25 @@
+# Environment
+.env
+.env.cloud
+
+# OS / Editor
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+logs/
+
+# Build artifacts
+dist/
+build/
+coverage/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Docker volumes (if exported)
+*.tar

@@ -1,0 +1,178 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  SUPER_ADMIN
+  BUILDING_ADMIN
+  AGENT
+  CONCIERGE
+  OWNER
+  RESIDENT
+}
+
+enum UnitType {
+  APARTMENT
+  PARKING
+  WAREHOUSE
+  COMMERCIAL
+}
+
+enum PropertyType {
+  APARTMENT
+  HOUSE
+  OFFICE
+  COMMERCIAL
+  LAND
+  WAREHOUSE
+}
+
+enum OperationType {
+  SALE
+  RENT
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  RESERVED
+  CLOSED
+}
+
+enum LeadStage {
+  CONTACT
+  VISIT_SCHEDULED
+  VISIT_DONE
+  OFFER
+  NEGOTIATION
+  CLOSED_WON
+  CLOSED_LOST
+}
+
+// ─── Modelos core ─────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  phone     String?
+  role      Role     @default(RESIDENT)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  residents    Resident[]
+  ownedUnits   Unit[]     @relation("UnitOwner")
+  assignedLeads Lead[]    @relation("LeadAgent")
+
+  @@map("users")
+}
+
+model Building {
+  id         String   @id @default(cuid())
+  name       String
+  address    String
+  city       String
+  commune    String
+  totalUnits Int
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  units Unit[]
+
+  @@map("buildings")
+}
+
+model Unit {
+  id          String   @id @default(cuid())
+  number      String
+  floor       Int?
+  type        UnitType @default(APARTMENT)
+  area        Float?
+  parkingSpot String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  buildingId String
+  building   Building @relation(fields: [buildingId], references: [id])
+
+  ownerId String?
+  owner   User?   @relation("UnitOwner", fields: [ownerId], references: [id])
+
+  residents Resident[]
+
+  @@unique([buildingId, number])
+  @@map("units")
+}
+
+model Resident {
+  id        String    @id @default(cuid())
+  moveIn    DateTime
+  moveOut   DateTime?
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  unitId String
+  unit   Unit   @relation(fields: [unitId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("residents")
+}
+
+model Property {
+  id           String         @id @default(cuid())
+  title        String
+  description  String?
+  address      String
+  city         String
+  commune      String
+  type         PropertyType
+  operation    OperationType
+  price        Decimal        @db.Decimal(14, 2)
+  currency     String         @default("CLP")
+  area         Float?
+  bedrooms     Int?
+  bathrooms    Int?
+  parkingSpots Int?
+  status       PropertyStatus @default(AVAILABLE)
+  isActive     Boolean        @default(true)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  leads Lead[]
+
+  @@map("properties")
+}
+
+model Lead {
+  id        String    @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String?
+  notes     String?
+  stage     LeadStage @default(CONTACT)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  propertyId String?
+  property   Property? @relation(fields: [propertyId], references: [id])
+
+  agentId String?
+  agent   User?   @relation("LeadAgent", fields: [agentId], references: [id])
+
+  @@map("leads")
+}

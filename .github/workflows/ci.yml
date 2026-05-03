@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  infra-lint-docker:
+    name: Validate Docker stack
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Copy env for compose validation
+        run: cp .env.example .env
+
+      - name: Validate Docker Compose syntax
+        run: docker compose config
+
+      - name: Validate Docker infra files
+        run: |
+          test -f .env.example
+          test -f docker-compose.yml
+          test -f infra/monitoring/prometheus/prometheus.yml
+          test -f infra/monitoring/grafana/provisioning/datasources/datasource.yml
+
+  infra-lint-cloud:
+    name: Validate cloud (no-Docker) setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate cloud env template exists
+        run: test -f .env.cloud.example
+
+      - name: Validate required cloud variables in template
+        run: |
+          for var in DATABASE_URL REDIS_URL S3_ENDPOINT S3_BUCKET S3_ACCESS_KEY S3_SECRET_KEY JWT_SECRET ENCRYPTION_KEY; do
+            grep -q "^${var}=" .env.cloud.example || (echo "Missing variable: $var in .env.cloud.example" && exit 1)
+          done
+
+      - name: Validate cloud check script exists
+        run: test -f scripts/check-infra-cloud.ps1
