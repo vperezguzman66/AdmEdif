@@ -6,6 +6,18 @@ Guía rápida de autenticación, módulos y endpoints disponibles en la API actu
 
 - Local: `http://localhost:4000/api/v1`
 - Prefijo global: `api/v1`
+- Swagger UI: `http://localhost:4000/api/docs`
+
+## OpenAPI / Swagger
+
+La API expone documentación interactiva en `GET /api/docs`.
+
+Desde esa interfaz puedes:
+
+- inspeccionar endpoints y DTOs
+- probar requests directamente
+- autorizarte con Bearer token
+- validar contratos rápidamente durante desarrollo
 
 ## Autenticación
 
@@ -252,7 +264,6 @@ La aplicación tiene configuración global de NestJS para:
 
 ## Próximas mejoras recomendadas de API
 
-- Swagger / OpenAPI
 - versionado formal de DTOs
 - paginación en listados
 - filtros avanzados en `properties` y `leads`

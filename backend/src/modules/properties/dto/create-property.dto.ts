@@ -6,31 +6,31 @@ import { OperationType, PropertyType } from '@prisma/client';
 
 export class CreatePropertyDto {
   @IsNotEmpty()
-  title: string;
+  title!: string;
 
   @IsOptional()
   @IsString()
   description?: string;
 
   @IsNotEmpty()
-  address: string;
+  address!: string;
 
   @IsNotEmpty()
-  city: string;
+  city!: string;
 
   @IsNotEmpty()
-  commune: string;
+  commune!: string;
 
   @IsEnum(PropertyType)
-  type: PropertyType;
+  type!: PropertyType;
 
   @IsEnum(OperationType)
-  operation: OperationType;
+  operation!: OperationType;
 
   @IsNumber()
   @Min(0)
   @Type(() => Number)
-  price: number;
+  price!: number;
 
   @IsOptional()
   @IsString()

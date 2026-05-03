@@ -4,7 +4,7 @@ import { UnitType } from '@prisma/client';
 
 export class CreateUnitDto {
   @IsNotEmpty()
-  number: string;
+  number!: string;
 
   @IsOptional()
   @IsInt()
@@ -24,7 +24,7 @@ export class CreateUnitDto {
   parkingSpot?: string;
 
   @IsNotEmpty()
-  buildingId: string;
+  buildingId!: string;
 
   @IsOptional()
   ownerId?: string;

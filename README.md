@@ -16,6 +16,7 @@ Actualmente el repositorio incluye una **API backend en NestJS**, un **modelo de
 - API backend con **NestJS 11** + **TypeScript 5**
 - ORM con **Prisma 5** sobre **PostgreSQL**
 - Autenticación con **JWT**
+- Documentación interactiva con **Swagger / OpenAPI**
 - Control de acceso por roles
 - Módulos funcionales:
   - `auth`
@@ -131,6 +132,7 @@ Resumen conceptual:
 - Prefijo global: `api/v1`
 - Puerto por defecto: `4000`
 - Base URL local: `http://localhost:4000/api/v1`
+- Swagger UI local: `http://localhost:4000/api/docs`
 
 Consulta el detalle de endpoints y reglas de acceso en `docs/backend-api.md`.
 
@@ -249,7 +251,7 @@ La pipeline de GitHub Actions valida dos escenarios:
 ## Roadmap sugerido
 
 1. Crear frontend en Next.js
-2. Agregar Swagger/OpenAPI
+2. Enriquecer Swagger/OpenAPI con ejemplos y respuestas
 3. Implementar refresh tokens / sesiones robustas
 4. Incorporar módulos de pagos, gastos comunes y documentos
 5. Añadir auditoría y trazabilidad operativa

@@ -3,13 +3,13 @@ import { LeadStage } from '@prisma/client';
 
 export class CreateLeadDto {
   @IsNotEmpty()
-  firstName: string;
+  firstName!: string;
 
   @IsNotEmpty()
-  lastName: string;
+  lastName!: string;
 
   @IsEmail()
-  email: string;
+  email!: string;
 
   @IsOptional()
   @IsString()
@@ -28,7 +28,7 @@ export class CreateLeadDto {
 
 export class UpdateLeadStageDto {
   @IsEnum(LeadStage)
-  stage: LeadStage;
+  stage!: LeadStage;
 
   @IsOptional()
   @IsString()

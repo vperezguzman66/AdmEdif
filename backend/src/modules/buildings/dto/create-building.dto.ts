@@ -3,19 +3,19 @@ import { Type } from 'class-transformer';
 
 export class CreateBuildingDto {
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @IsNotEmpty()
-  address: string;
+  address!: string;
 
   @IsNotEmpty()
-  city: string;
+  city!: string;
 
   @IsNotEmpty()
-  commune: string;
+  commune!: string;
 
   @IsInt()
   @Min(1)
   @Type(() => Number)
-  totalUnits: number;
+  totalUnits!: number;
 }
